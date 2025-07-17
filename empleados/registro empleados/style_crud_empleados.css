@@ -1,0 +1,131 @@
+/* Estilo general */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #fff8f1;
+  padding: 40px;
+  margin: 0;
+}
+
+h1 {
+  text-align: center;
+  color: #e28c00;
+  margin-bottom: 30px;
+  font-size: 32px;
+}
+
+/* Botón Regresar flotante */
+.logo_boton {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+}
+
+.btn_regresar {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  background-color: #f0a500;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  text-decoration: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s;
+}
+
+.btn_regresar:hover {
+  background-color: #d88c00;
+}
+
+/* Tabla */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th {
+  background-color: #ffb84d;
+  color: white;
+  padding: 14px;
+  font-size: 16px;
+  text-align: left;
+}
+
+td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+tr:nth-child(even) {
+  background-color: #fff1db;
+}
+
+tr:hover {
+  background-color: #ffeed1;
+}
+
+/* Formulario en línea */
+form.inline-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 140px;
+  font-size: 14px;
+}
+
+.password-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.toggle-pass {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* Botones */
+.btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-edit {
+  background-color: #ff9800;
+  color: white;
+}
+
+.btn-edit:hover {
+  background-color: #ff9800;
+}
+
+.btn-delete {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.btn-delete:hover {
+  background-color: #c0392b;
+}

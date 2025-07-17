@@ -1,0 +1,145 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #fff8ec;
+  color: #333;
+  padding: 20px;
+  margin: 0;
+}
+
+h1 {
+  text-align: center;
+  color: #e28c00;
+  margin-bottom: 20px;
+}
+
+button, .btn {
+  background-color: #ff9b20;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease-in-out;
+}
+
+button:hover, .btn:hover {
+  background-color: #e28c00;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+th {
+  background-color: #ffd580;
+  color: #333;
+  font-weight: bold;
+}
+
+input[type="text"], input[type="number"], input[type="date"] {
+  width: 95%;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.inline-form {
+  display: contents;
+}
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+  justify-content: center;
+}
+
+.filter-btn {
+  background-color: #ffe2b3;
+  color: #e28c00;
+  border: 1px solid #e28c00;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.filter-btn:hover {
+  background-color: #ffd580;
+}
+
+.filter-btn.active {
+  background-color: #e28c00;
+  color: white;
+}
+
+.filtro-categorias {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #fff8ec;
+  padding: 10px 0 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.filtro-categorias a {
+  text-decoration: none;
+  color: #e28c00;
+  background-color: #fff3d1;
+  padding: 6px 14px;
+  margin: 4px;
+  border-radius: 20px;
+  border: 1px solid #e5ba73;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.filtro-categorias a:hover {
+  background-color: #e28c00;
+  color: white;
+}
+
+.filtro-categorias a.activo {
+  background-color: #d88c00;
+  color: white;
+  font-weight: bold;
+}
+
+@keyframes deslizarDesdeArriba {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.mensaje-alerta {
+  color: #b00020;
+  background-color: #ffeaea;
+  border: 1px solid #ffb3b3;
+  padding: 12px 20px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: bold;
+  margin: 20px auto;
+  width: 80%;
+  font-size: 1.1em;
+  box-shadow: 0 0 5px rgba(255, 0, 0, 0.2);
+  animation: deslizarDesdeArriba 0.6s ease-out;
+}
