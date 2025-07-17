@@ -1,24 +1,12 @@
 <?php
 session_start();
 
-// ⚙️ Conexión usando variables de entorno de Railway
-$DB_HOST = getenv('DB_HOST');
-$DB_USER = getenv('DB_USER');
-$DB_PASS = getenv('DB_PASS');
-$DB_NAME = getenv('DB_NAME');
-$DB_PORT = getenv('DB_PORT') ?: 3306;
+// Incluir configuración de base de datos
+require_once 'config.php';
 
-$conexion = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME, $DB_PORT);
-
-// 🛠️ Mostrar errores en desarrollo
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
-// 📛 Verificar conexión
-if ($conexion->connect_error) {
-    die("Error de conexión: " . $conexion->connect_error);
-}
 
 $error = "";
 
@@ -26,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btningresar'])) {
     $correo = $_POST['correo'];
     $clave = $_POST['contraseña'];
 
-    // 🔍 Buscar en cliente
+    // Buscar en cliente
     $sql = "SELECT * FROM cliente WHERE correo = ?";
     $stmt = $conexion->prepare($sql);
     $stmt->bind_param("s", $correo);
@@ -34,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btningresar'])) {
     $resultado = $stmt->get_result();
 
     if ($fila = $resultado->fetch_assoc()) {
-        if (password_verify($clave, $fila['contraseña'])) {
+        if ($fila['correo'] === $correo && password_verify($clave, $fila['contraseña'])) {
             $_SESSION['cliente'] = $fila['doc_cliente'];
             $_SESSION['nombre_cliente'] = $fila['nom_cliente'];
             $_SESSION['rol'] = 'cliente';
@@ -43,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btningresar'])) {
         }
     }
 
-    // 🔍 Buscar en administrador
+    // Buscar en administrador
     $sql_admin = "SELECT * FROM administrador WHERE correo = ?";
     $stmt = $conexion->prepare($sql_admin);
     $stmt->bind_param("s", $correo);
@@ -51,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btningresar'])) {
     $resultado = $stmt->get_result();
 
     if ($fila = $resultado->fetch_assoc()) {
-        if (password_verify($clave, $fila['contraseña'])) {
+        if ($fila['correo'] === $correo && password_verify($clave, $fila['contraseña'])) {
             $_SESSION['admin'] = $fila['id_admin'];
             $_SESSION['rol'] = 'admin';
             header("Location: ../admin.php");
@@ -59,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btningresar'])) {
         }
     }
 
-    // 🔍 Buscar en cajero
+    // Buscar en cajero
     $sql_cajero = "SELECT * FROM cajero WHERE correo = ?";
     $stmt = $conexion->prepare($sql_cajero);
     $stmt->bind_param("s", $correo);
@@ -67,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btningresar'])) {
     $resultado = $stmt->get_result();
 
     if ($fila = $resultado->fetch_assoc()) {
-        if (password_verify($clave, $fila['contraseña'])) {
+        if ($fila['correo'] === $correo && password_verify($clave, $fila['contraseña'])) {
             $_SESSION['cajero'] = $fila['id_cajero'];
             $_SESSION['rol'] = 'cajero';
             header("Location: ../cajero.php");
@@ -75,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btningresar'])) {
         }
     }
 
-    // ❌ Si no coincide con ningún usuario
+    // Si no coincide con ningún usuario
     $error = "Correo o contraseña incorrectos.";
 }
 ?>
