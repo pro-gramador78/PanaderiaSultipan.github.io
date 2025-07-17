@@ -1,7 +1,7 @@
 <?php
-// config.php - Configuración de base de datos para Railway
+// conexion.php - Configuración de base de datos para Railway
 
-// Configuración de base de datos usando variables de entorno de Railway
+// Configuración usando variables de entorno de Railway
 $host = $_ENV['MYSQLHOST'] ?? 'localhost';
 $username = $_ENV['MYSQLUSER'] ?? 'root';
 $password = $_ENV['MYSQLPASSWORD'] ?? '';
@@ -20,6 +20,6 @@ if ($conexion->connect_error) {
 // Configurar charset
 $conexion->set_charset("utf8");
 
-// Debug temporal (eliminar después)
+// Debug temporal (eliminar después de verificar que funciona)
 error_log("Conexión exitosa a: " . $host . ":" . $port . " - DB: " . $database);
 ?>
