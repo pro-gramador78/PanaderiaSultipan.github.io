@@ -1,13 +1,17 @@
 <?php
-$host = getenv("DB_HOST");
-$port = getenv("DB_PORT");
-$user = getenv("DB_USER");
-$pass = getenv("DB_PASS");
-$db   = getenv("DB_NAME");
+$conexion = new mysqli(
+    "mysql.railway.internal",    // Host de Railway
+    "root",                      // Usuario de DB
+    "gOPOLYXyQriprVoobIDiDfdalHBeCEVcN", // Contraseña de DB
+    "root",                      // Nombre de la base de datos
+    3306                         // Puerto
+);
 
-$conexion = new mysqli($host, $user, $pass, $db, $port);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 if ($conexion->connect_error) {
-    die("Error de conexión: " . $conexion->connect_error);
+    die("❌ Error de conexión: " . $conexion->connect_error);
 }
 ?>
