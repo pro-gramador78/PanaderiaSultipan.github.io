@@ -1,55 +1,82 @@
 <?php
 session_start();
 
-// Mostrar errores (solo durante desarrollo, quítalo en producción)
+// ⚙️ Conexión usando variables de entorno de Railway
+$DB_HOST = getenv('DB_HOST');
+$DB_USER = getenv('DB_USER');
+$DB_PASS = getenv('DB_PASS');
+$DB_NAME = getenv('DB_NAME');
+$DB_PORT = getenv('DB_PORT') ?: 3306;
+
+$conexion = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME, $DB_PORT);
+
+// 🛠️ Mostrar errores en desarrollo
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// CONEXIÓN A RAILWAY
-$DB_HOST = 'containers-us-west-190.railway.app';
-$DB_USER = 'root';
-$DB_PASS = 'tu_contraseña_aquí';
-$DB_NAME = 'sultipan';
-$DB_PORT = 5678; // reemplaza con el puerto real de tu base de datos
-
-$conexion = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME, $DB_PORT);
+// 📛 Verificar conexión
 if ($conexion->connect_error) {
-    die("❌ Error de conexión: " . $conexion->connect_error);
+    die("Error de conexión: " . $conexion->connect_error);
 }
 
 $error = "";
 
-// Autenticación
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btningresar'])) {
-    $correo = trim($_POST['correo']);
-    $clave = trim($_POST['contraseña']);
+    $correo = $_POST['correo'];
+    $clave = $_POST['contraseña'];
 
-    function verificar_usuario($conexion, $tabla, $campo_id, $campo_nombre, $correo, $clave, $redirect, $rol) {
-        $sql = "SELECT * FROM $tabla WHERE correo = ?";
-        $stmt = $conexion->prepare($sql);
-        $stmt->bind_param("s", $correo);
-        $stmt->execute();
-        $resultado = $stmt->get_result();
+    // 🔍 Buscar en cliente
+    $sql = "SELECT * FROM cliente WHERE correo = ?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("s", $correo);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
 
-        if ($fila = $resultado->fetch_assoc()) {
-            if (password_verify($clave, $fila['contraseña'])) {
-                $_SESSION[$rol] = $fila[$campo_id];
-                $_SESSION['nombre_' . $rol] = $fila[$campo_nombre];
-                $_SESSION['rol'] = $rol;
-                header("Location: $redirect");
-                exit;
-            }
+    if ($fila = $resultado->fetch_assoc()) {
+        if (password_verify($clave, $fila['contraseña'])) {
+            $_SESSION['cliente'] = $fila['doc_cliente'];
+            $_SESSION['nombre_cliente'] = $fila['nom_cliente'];
+            $_SESSION['rol'] = 'cliente';
+            header("Location: ../cliente/cliente.php");
+            exit;
         }
     }
 
-    // Verificar roles
-    verificar_usuario($conexion, "cliente", "doc_cliente", "nom_cliente", $correo, $clave, "../cliente/cliente.php", "cliente");
-    verificar_usuario($conexion, "administrador", "id_admin", "nombre", $correo, $clave, "../admin.php", "admin");
-    verificar_usuario($conexion, "cajero", "id_cajero", "nombre", $correo, $clave, "../cajero.php", "cajero");
+    // 🔍 Buscar en administrador
+    $sql_admin = "SELECT * FROM administrador WHERE correo = ?";
+    $stmt = $conexion->prepare($sql_admin);
+    $stmt->bind_param("s", $correo);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
 
-    // Si ninguno coincidió
-    $error = "❌ Correo o contraseña incorrectos.";
+    if ($fila = $resultado->fetch_assoc()) {
+        if (password_verify($clave, $fila['contraseña'])) {
+            $_SESSION['admin'] = $fila['id_admin'];
+            $_SESSION['rol'] = 'admin';
+            header("Location: ../admin.php");
+            exit;
+        }
+    }
+
+    // 🔍 Buscar en cajero
+    $sql_cajero = "SELECT * FROM cajero WHERE correo = ?";
+    $stmt = $conexion->prepare($sql_cajero);
+    $stmt->bind_param("s", $correo);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+
+    if ($fila = $resultado->fetch_assoc()) {
+        if (password_verify($clave, $fila['contraseña'])) {
+            $_SESSION['cajero'] = $fila['id_cajero'];
+            $_SESSION['rol'] = 'cajero';
+            header("Location: ../cajero.php");
+            exit;
+        }
+    }
+
+    // ❌ Si no coincide con ningún usuario
+    $error = "Correo o contraseña incorrectos.";
 }
 ?>
 <!DOCTYPE html>
@@ -72,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btningresar'])) {
           <div class="mensaje-error"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
 
-        <form action="" method="post" novalidate>
+        <form action="ControladorLogin.php" method="post" novalidate>
           <div class="inputbox">
             <input type="email" name="correo" required placeholder=" " />
             <label>Correo</label>
