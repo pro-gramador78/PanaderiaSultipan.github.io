@@ -1,17 +1,25 @@
 <?php
-$conexion = new mysqli(
-    "mysql.railway.internal",    // Host de Railway
-    "root",                      // Usuario de DB
-    "gOPOLYXyQriprVoobIDiDfdalHBeCEVcN", // Contraseña de DB
-    "root",                      // Nombre de la base de datos
-    3306                         // Puerto
-);
+// config.php - Configuración de base de datos para Railway
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// Configuración de base de datos usando variables de entorno de Railway
+$host = $_ENV['MYSQLHOST'] ?? 'localhost';
+$username = $_ENV['MYSQLUSER'] ?? 'root';
+$password = $_ENV['MYSQLPASSWORD'] ?? '';
+$database = $_ENV['MYSQL_DATABASE'] ?? 'sultipan';
+$port = $_ENV['MYSQLPORT'] ?? 3306;
 
+// Crear conexión
+$conexion = new mysqli($host, $username, $password, $database, $port);
+
+// Verificar conexión
 if ($conexion->connect_error) {
-    die("❌ Error de conexión: " . $conexion->connect_error);
+    error_log("Error de conexión: " . $conexion->connect_error);
+    die("Error de conexión a la base de datos");
 }
+
+// Configurar charset
+$conexion->set_charset("utf8");
+
+// Debug temporal (eliminar después)
+error_log("Conexión exitosa a: " . $host . ":" . $port . " - DB: " . $database);
 ?>
