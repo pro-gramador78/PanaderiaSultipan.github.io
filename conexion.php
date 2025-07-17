@@ -1,10 +1,10 @@
 <?php
 $conexion = new mysqli(
-    getenv("MYSQLHOST"),
-    getenv("MYSQLUSER"),
-    getenv("MYSQLPASSWORD"),
-    getenv("MYSQLDATABASE"),
-    getenv("MYSQLPORT")
+    getenv("DB_HOST"),
+    getenv("DB_USER"),
+    getenv("DB_PASS"),
+    getenv("DB_NAME"),
+    getenv("DB_PORT")
 );
 
 if ($conexion->connect_error) {
